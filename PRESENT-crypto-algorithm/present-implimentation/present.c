@@ -1,3 +1,5 @@
+// PRESENT algorithm implementation in C
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -85,7 +87,7 @@ uint64_t decrypt(uint64_t ciphertext, uint16_t key_hi, uint64_t key_lo){
 
 int main(){
     init_tables();
-    uint64_t plaintext = 0x0123456789ABCDEF0;
+    uint64_t plaintext = 0x0123456789ABCDEF;
     uint16_t key_hi = 0x2026;
     uint64_t key_lo = 0x300320261843CAFE;
     uint64_t cipher = encrypt(plaintext, key_hi, key_lo);
