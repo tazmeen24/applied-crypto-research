@@ -2,11 +2,11 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-// S-boxes and Inverse S-boxes
+// Initializing S-boxes and Inverse S-boxes
 uint8_t SBOX[16] = { 0xC, 0x5, 0x6, 0xB, 0x9, 0x0, 0xA, 0xD, 0x3, 0xE, 0xF, 0x8, 0x4, 0x7, 0x1, 0x2};
 uint8_t SBOX_INV[16] = { 0x5, 0xE, 0xF, 0x8, 0xC, 0x1, 0x2, 0xD, 0xB, 0x4, 0x6, 0x3, 0x0, 0x7, 0x9, 0xA};
 
-// Permutation tables
+// Permutation tables initialization
 uint8_t PERM[64];
 uint8_t PERM_INV[64];
 
@@ -29,7 +29,7 @@ uint64_t substitution(uint64_t state, uint8_t *box){
     return result;
 }
 
-// Moves each bit to its new position
+// function moves each bit to its new position
 uint64_t permutation(uint64_t state, uint8_t *perm){
     uint64_t result = 0;
     for (int i = 0; i < 64; i++){
@@ -39,10 +39,10 @@ uint64_t permutation(uint64_t state, uint8_t *perm){
     return result;
 }
 
-// Generates 32 round keys from the 80-bit master key
+// function generates 32 round keys from the 80-bit master key
 void key_schedule(uint16_t key_hi, uint64_t key_lo, uint64_t rk[32]){
     for (int round = 1; round <= 32; round++){
-        // Extract leftmost 64 bits as round key
+        // Extracts leftmost 64 bits as round key
         rk[round - 1] = ((uint64_t)key_hi << 48) | (key_lo >> 16);
         if (round == 32)
             break;
@@ -59,44 +59,41 @@ void key_schedule(uint16_t key_hi, uint64_t key_lo, uint64_t rk[32]){
     }
 }
 
-// Encrypt a 64-bit block
+// Encrypting 64-bit block
 uint64_t encrypt(uint64_t plaintext, uint16_t key_hi, uint64_t key_lo){
     uint64_t rk[32];
     key_schedule(key_hi, key_lo, rk);
     uint64_t state = plaintext;
-    for (int r = 0; r < 31; r++)
-    {
-        state ^= rk[r]; // Key Addition
+    for (int r = 0; r < 31; r++) {
+        state ^= rk[r]; // Combining the key using XOR
         state = substitution(state, SBOX); // Substitution
         state = permutation(state, PERM); // Permutation
-    }
-    return state ^ rk[31]; // Final key XOR
+    } return state ^ rk[31]; // Combining the final key using XOR 
 }
 
-// Decrypt a 64-bit block
+// Decrypting 64-bit block
 uint64_t decrypt(uint64_t ciphertext, uint16_t key_hi, uint64_t key_lo){
     uint64_t rk[32];
     key_schedule(key_hi, key_lo, rk);
     uint64_t state = ciphertext ^ rk[31]; // Undo final key XOR
     for (int r = 30; r >= 0; r--){
-        state = permutation(state, PERM_INV);  // Inverse Permutation
+        state = permutation(state, PERM_INV); // Inverse Permutation
         state = substitution(state, SBOX_INV); // Inverse Substitution
-        state ^= rk[r]; // Key Addition
-    }
-    return state;
+        state ^= rk[r]; // Undo Key XOR
+    } return state;
 }
 
 int main(){
     init_tables();
-    uint64_t plaintext = 0x0123456789ABCDEFULL;
-    uint16_t key_hi = 0xDEAD;
-    uint64_t key_lo = 0xBEEFCAFEBABE1234ULL;
+    uint64_t plaintext = 0x0123456789ABCDEF0;
+    uint16_t key_hi = 0x2026;
+    uint64_t key_lo = 0x300320261843CAFE;
     uint64_t cipher = encrypt(plaintext, key_hi, key_lo);
     uint64_t decrypted = decrypt(cipher, key_hi, key_lo);
     printf("Plaintext : %016llX\n", plaintext);
     printf("Key : %04X%016llX\n", key_hi, key_lo);
     printf("Ciphertext : %016llX\n", cipher);
     printf("Decrypted : %016llX\n", decrypted);
-    printf("Match : %s\n", decrypted == plaintext ? "YES" : "NO");
+    printf("Encryption And Decryption : %s\n", decrypted == plaintext ? "SUCCESSFULL" : "NOT SUCCESSFUL");
     return 0;
 }
