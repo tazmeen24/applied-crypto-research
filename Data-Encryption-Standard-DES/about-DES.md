@@ -29,12 +29,12 @@ DES works using a **Feistel structure**, where the data is split into two halves
 
 After the Initial Permutation, the 64-bit data block is split into two halves:
 
-- **Left half (L₀)** – 32 bits
-- **Right half (R₀)** – 32 bits
+- **Left half (L₀)** - 32 bits
+- **Right half (R₀)** - 32 bits
 
 DES then performs 16 rounds of processing using a Feistel structure.
 
-![DES Feistel Structure – 16 Rounds](images/feistel_image.png)
+![DES Feistel Structure - 16 Rounds](images/feistel_image.png)
 
 ### For each round i (1 to 16):
 
@@ -62,7 +62,7 @@ After 16 rounds, the final halves are swapped and passed through the **Inverse I
 
 The F-function takes the 32-bit right half and the 48-bit round key as inputs:
 
-![DES Round Function F – Expansion, XOR, S-boxes, P-box](images/round-func.png)
+![DES Round Function F - Expansion, XOR, S-boxes, P-box](images/round-func.png)
 
 | Step | Operation | Bits |
 |---|---|---|
@@ -74,16 +74,16 @@ The F-function takes the 32-bit right half and the 48-bit round key as inputs:
 
 ---
 
-## Key Schedule – Generating 16 Round Keys
+## Key Schedule - Generating 16 Round Keys
 
 DES generates 16 round keys (each 48 bits) from the original 64-bit key by:
 
-1. **Removing parity bits** — 64 bits → 56 bits (via Permuted Choice 1 / PC-1)
+1. **Removing parity bits** - 64 bits to 56 bits (via Permuted Choice 1 / PC-1)
 2. **Splitting** into two 28-bit halves: **C₀** and **D₀**
 3. **Left-shifting** each half every round
 4. **Applying PC-2** (Permuted Choice 2) to produce a 48-bit sub key per round
 
-![DES Key Schedule – Generating K₁ to K₁₆](images/key_schedule.png)
+![DES Key Schedule - Generating K₁ to K₁₆](images/key_schedule.png)
 
 ---
 
