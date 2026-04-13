@@ -84,3 +84,13 @@ DES generates 16 round keys (each 48 bits) from the original 64-bit key by:
 4. **Applying PC-2** (Permuted Choice 2) to produce a 48-bit sub key per round
 
 ![DES Key Schedule – Generating K₁ to K₁₆](images/key_schedule.png)
+
+---
+
+## References
+
+[1] NIST, *FIPS PUB 46-3: Data Encryption Standard (DES)*, 1999.  
+Available: https://csrc.nist.gov/files/pubs/fips/46-3/final/docs/fips46-3.pdf  
+
+[2] Simplilearn, *What is DES (Data Encryption Standard)?*  
+Available: https://www.simplilearn.com/what-is-des-article
