@@ -26,7 +26,6 @@ static const int inverse_init_permutation_table[] ={
 };
 
 // Expansion Table for each round 
-// 32 bits of right half converted to 48 bits by using certain bits multiple times
 static const int expansion_table[] = {
     32, 1, 2, 3, 4, 5,
     4, 5, 6, 7, 8, 9,
@@ -47,7 +46,6 @@ static const int permute_table[] = {
 };
 
 // Key Schedule - Permutated Choice 1
-// dropping 8 parity bits to get 56 bit key and shifting 64 bit key
 static const int PC1[] = {
     //C half
     57,49,41,33,25,17,9,
@@ -61,12 +59,10 @@ static const int PC1[] = {
     21,13,5,28,20,12,4
 };
 
-// left Shift order for 16 rounds of key generation
-// 1, 2, 9, 16 th rounds use 1 bit left shift, rest use 2 bits left shift 
+// left Shift order
 static const int shifts[] = {1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1};
 
 // Key Schedule - Permutated Choice 2
-// selecting 48 bits from 56 bit sub key(c+d) to be used in each round
 static const int PC2[] = {
     14,17,11,24,1,5,
     3,28,15,6,21,10,
@@ -79,10 +75,6 @@ static const int PC2[] = {
 };
 
 // 8 S-Boxes (Substitution Boxes)
-// 8 S-Boxes, each takes 6 bit i/p and gives 4 bit o/p, so total 48 bit i/p gives 32 bit o/p
-// Each s box has 4(0-3 in binary) rows and 16 columns(0-15 in binary)
-// Row is 1st & 6th bit of input, column is 2nd to 5th bit of input
-// for eg, 101010 i/p, row = 10(2 in decimal), column = 0101(5 in decimal) so output is sbox[row][column]
 static const int SBOX[8][4][16] = {
     // S1
     {{14,4,13,1,2,15,11,8,3,10,6,12,5,9,0,7},
